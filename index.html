@@ -119,7 +119,8 @@ img {
 
 <script>
 // --- CONFIGURAÇÃO FIREBASE ---
-
+//coloca aqui aquele bloco de código do firebase
+  
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -128,7 +129,7 @@ const messagesRef = db.ref('messages');
 let currentUser = null;
 let peer;
 
-// --- SISTEMA DE LOGIN ---
+//Sistema de Login
 function login() {
     let username = document.getElementById("username").value;
     if (!username) return alert("Digite um nome!");
@@ -142,7 +143,7 @@ function login() {
     listenToMessages(); // Começa a ouvir o banco de dados
 }
 
-// --- SISTEMA DE MENSAGENS REALTIME ---
+//Sistema de mensagens em tempo real
 function sendMessage() {
     let text = document.getElementById("messageInput").value;
     if (!text) return;
@@ -179,7 +180,7 @@ function renderMessages(data) {
     chat.scrollTop = chat.scrollHeight;
 }
 
-// --- SISTEMA DE VOZ (PEERJS) ---
+//Sistema de voz (PEERJS)
 function initPeer(id) {
     peer = new Peer(id); 
 
@@ -209,5 +210,6 @@ function playRemoteStream(stream) {
 </body>
 
 </html>
+
 
 
