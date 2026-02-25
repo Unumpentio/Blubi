@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<meta charset="UTF-8">
+<title>Protótipo</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #2b2d31;
+  color: white;
+  display: flex;
+  height: 100vh;
+}
+
+#auth, #app {
+  width: 100%;
+}
+
+#auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+input {
+  padding: 8px;
+  margin: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  padding: 8px 12px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #5865f2;
+  color: white;
+}
+
+#app {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+}
+
+#header {
+  background: #1e1f22;
+  padding: 10px;
+}
+
+#chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.message {
+  margin-bottom: 10px;
+  background: #313338;
+  padding: 8px;
+  border-radius: 5px;
+}
+
+.reply {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+#inputArea {
+  display: flex;
+  padding: 10px;
+  background: #1e1f22;
+}
+
+#inputArea input[type="text"] {
+  flex: 1;
+}
+
+img {
+  max-width: 200px;
+  display: block;
+  margin-top: 5px;
+  border-radius: 5px;
+}
+</style>
+</head>
+<body>
+
+<div id="auth">
+  <h2>Criar Conta / Login</h2>
+  <input id="username" placeholder="Usuário">
+  <input id="password" type="password" placeholder="Senha">
+  <button onclick="register()">Criar Conta</button>
+  <button onclick="login()">Entrar</button>
+</div>
+
+<div id="app">
+  <div id="header">
+    <span id="currentUser"></span>
+    <button onclick="startVoice()">Entrar no Chat de Voz</button>
+  </div>
+
+  <div id="chat"></div>
+
+  <div id="inputArea">
+    <input type="file" id="imageInput">
+    <input type="text" id="messageInput" placeholder="Digite sua mensagem...">
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+</div>
+
+<script>
+// --- CONFIGURAÇÃO FIREBASE ---
+const firebaseConfig = {
+  apiKey: "SUA_API_KEY",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  databaseURL: "https://SEU_PROJETO.firebaseio.com",
+  projectId: "SEU_PROJETO",
+  storageBucket: "SEU_PROJETO.appspot.com",
+  messagingSenderId: "ID",
+  appId: "APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const messagesRef = db.ref('messages');
+
+let currentUser = null;
+let peer;
+
+// --- SISTEMA DE LOGIN ---
+function login() {
+    let username = document.getElementById("username").value;
+    if (!username) return alert("Digite um nome!");
+
+    currentUser = username;
+    document.getElementById("auth").style.display = "none";
+    document.getElementById("app").style.display = "flex";
+    document.getElementById("currentUser").innerText = "Logado como: " + username;
+
+    initPeer(username);
+    listenToMessages(); // Começa a ouvir o banco de dados
+}
+
+// --- SISTEMA DE MENSAGENS REALTIME ---
+function sendMessage() {
+    let text = document.getElementById("messageInput").value;
+    if (!text) return;
+
+    // Salva no Firebase (isso avisa todos os outros usuários na hora)
+    messagesRef.push({
+        user: currentUser,
+        text: text,
+        timestamp: Date.now()
+    });
+
+    document.getElementById("messageInput").value = "";
+}
+
+function listenToMessages() {
+    // Esta função "escuta" qualquer mudança no banco e atualiza a tela
+    messagesRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        renderMessages(data);
+    });
+}
+
+function renderMessages(data) {
+    let chat = document.getElementById("chat");
+    chat.innerHTML = "";
+    if (!data) return;
+
+    Object.values(data).forEach(msg => {
+        let div = document.createElement("div");
+        div.className = "message";
+        div.innerHTML = `<strong>${msg.user}:</strong> ${msg.text}`;
+        chat.appendChild(div);
+    });
+    chat.scrollTop = chat.scrollHeight;
+}
+
+// --- SISTEMA DE VOZ (PEERJS) ---
+function initPeer(id) {
+    peer = new Peer(id); 
+
+    peer.on('call', (call) => {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+            call.answer(stream);
+            call.on('stream', (remoteStream) => playRemoteStream(remoteStream));
+        });
+    });
+}
+
+async function startVoice() {
+    const target = prompt("Com quem você quer falar? (Digite o nome de usuário)");
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const call = peer.call(target, stream);
+    call.on('stream', (remoteStream) => playRemoteStream(remoteStream));
+}
+
+function playRemoteStream(stream) {
+    const audio = new Audio();
+    audio.srcObject = stream;
+    audio.play();
+}
+
+</script>
+
+</body>
+</html>
