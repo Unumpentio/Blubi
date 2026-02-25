@@ -120,14 +120,18 @@ img {
 <script>
 // --- CONFIGURAÇÃO FIREBASE ---
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_PROJETO.firebaseapp.com",
-  databaseURL: "https://SEU_PROJETO.firebaseio.com",
-  projectId: "SEU_PROJETO",
-  storageBucket: "SEU_PROJETO.appspot.com",
-  messagingSenderId: "ID",
-  appId: "APP_ID"
-};
+  type: "service_account",
+  project_id: "blub-d4a47",
+  private_key_id: "450b67ab6dab7f4cd64e64d2177d38f798d1c530",
+  private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC2D55fTMM6gu2J\nRrogvJzVU2fXtdY0XtH03iOV/PrvMBpvN7B+BKiN7q3RhXsfBeuXrAlG6PKpdgRd\n77XS+CffA1JgkMg5imQy52U2eAvnHLL/5l0RjNOc5STdKzq5MjezYg7Bp1RAhanz\nBsZmd9rlI9A3bFvRUTG+sU5RmshPk2QqQdNvLtAWaRmspUA1/OlQxAN6Em1x2PPW\nOh3lHVA++dMQ4agFxb6OgV4SFpjkLbnpLMF8O+unuOhCbw3oJ/kA2B5j0u2SVsop\nbdbJYqbUU8MArFGtBw42fURPuOiqcxMyrIdLTEzBqemfUfWuQY6qspqidc4QLSXm\nAUJcN14LAgMBAAECggEAUChPQ8lB2YSkvcCQmXJBoODwgvZR4cvvp96YD2ULPH1S\n3i3IPKujZJ42FF4vJ6kNIcHCceCFWpwV7x/nz4On1lYZkl+ccE0gsZLUqqcvImmt\n2+JajqwQzW7MDL6IQ9q60HV3Zsbb3u6atWABwUK68xESDxzbzixv+PQKtf4ufG37\nIFJ7QSVXKQA36ghMTFrhqwFEijTzuL8jB2uy3oLDR6U4/4jOx/YjW3v0d8SvzRpB\ngVC1h4qpn2ZNn5Td4LlwLcL9EpHkJeAhg4wDkcM+sZJz+CPPoevIAAbpX0tLjr5D\ntZhWC47XcNxwZ7ZNurh6Xsr6JdneCMev5F1j2j5/LQKBgQDrvKtjt1YvSj+mONMw\nxjDbnDaSjhGcM8ZphL5WCvjtBHnyhxzJUdK1pUEpTCRdQYBtV3t3tFJN4m5swG9D\nqE5al8u/dhJo/1PqcFnr7H2cjrn0JpAGgdEPPs+tdGrKrT21C0G9OTqMla/xFdPo\n+bccxq1mkhNCX+yx73/ZaAzujwKBgQDFtdLFOxKVF5kYA6u/ZUy/YQNtI16eRmHk\n9IUG+syWNDfSMbKJkXyEuqSUwQngYQAvjD9imAzhpWfAVYqKib40cdSJJWXtZ5WS\nFOY75MwESg2lboio0za5Y8bKl60TmFfYXk700TqFvQOgMjzkuRBQsFwEdBJcUs8Q\n5qlwX8SWxQKBgQDEoHI0kk+I0l2UwAEnxagrBXlfdLCroWP1z4sTKcPHrtwotxoD\nsgQXDufzEleikWgVy8poZjfgTuXcQAaOYGw6lDKWWF2yxoWwHlZiurdrRoFEbIXl\nZ5KBLNr8ywXoV+gIgoMq2flEGfbPGG3Q/bkGf5FS5LS7wFclc6coJ+nhcQKBgQCE\nfA6885TEK4f/O5Z/LtZ69/tfyu/Ah9FZpzDtOGqXzG4LgBnvbXpPRvK6a5C+tsF1\nGznuS412N2yKyceIhjzaz9xn+pOOvnbP6QlO4UaFKUpzrNoOp1poaJ/xaiokk1Vq\nO+gUzY+1xq8DTibX7dss9sDyiwUysJro7GhmUQZfMQKBgQDmvoyU9XW/o/gUyFOr\n2x6MucDJMZxQBQYYzhwTZ6eNMpz7f0V4R6w6B2NVCHwsuys8CMUEhIrrYvgHss2o\nutbBgYirbcW7qpsrvGsTji0JYNUkAo5/IiBV5T+aZOEG5wScJLAzlsOEsrsXUfHh\n1TuB+iviLcQ6+OHNqjio2+EXGQ==\n-----END PRIVATE KEY-----\n",
+  client_email: "firebase-adminsdk-fbsvc@blub-d4a47.iam.gserviceaccount.com",
+  client_id: "117937621353923927608",
+  auth_uri: "https://accounts.google.com/o/oauth2/auth",
+  token_uri: "https://oauth2.googleapis.com/token",
+  auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+  client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40blub-d4a47.iam.gserviceaccount.com",
+  universe_domain: "googleapis.com"
+}
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -215,4 +219,5 @@ function playRemoteStream(stream) {
 </script>
 
 </body>
+
 </html>
